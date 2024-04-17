@@ -15,58 +15,56 @@ L = 80.4
 
 # FUNCIONES
 
+def mostrar_intervalo_en_g(intervalo):
+    print(fa.g(intervalo))
+    print(fa.g(intervalo) < 0)
+
+def obtener_cambio_de_signo_en_g(intervalo):
+    a = 0
+    b = 0
+    for i, imagen in enumerate(fa.g(intervalo)):
+        if imagen < 0:
+            a = intervalo[i]
+            b = intervalo[i+1]
+    return (a, b)
+
+def mostrar_valores_de_cambio_de_signo_en_g(a, b):
+    print('La funcion en a vale = ', fa.g(a))
+    print('La funcion en b vale = ', fa.g(b))
+
+
+def graficar_g_en_intervalo(intervalo):
+    plt.plot(intervalo, fa.g(intervalo))
+    plt.show()
+
+
+def verificacion_numerica_N_R(y):
+    if np.all( 0.01 < y) and np.all( y < 1):
+        print("Imagen dentro del intervalo, se puede usar Newton-Raphson")
+    else:
+        print("No se puede usar Newton-Raphson")
+    
+
+def verificacion_visual_N_R(x, y):
+    plt.plot(x,y)
+    plt.show()
 
 intervalo = np.linspace(-1, 1, 100)
-print(fa.g(intervalo,x1,L))
-print(fa.g(intervalo,x1,L) < 0)
-a = 0
-b = 0
-for i, imagen in enumerate(fa.g(intervalo,x1,L)):
-    if imagen < 0:
-        a = intervalo[i]
-        b = intervalo[i+1]
-
-print('La funcion en a vale = ', fa.g(a,x1,L))
-print('La funcion en b vale = ', fa.g(b,x1,L))
-
-
-plt.plot(intervalo, fa.g(intervalo,x1,L))
-plt.show()
-
-fa.metodo_biseccion_segun_cota(0.01, 1, 0.00001, x1, L)
-
-a = 0.044
-b = 0.046
-x = np.linspace(a, b, 100)
-x = np.float64(x)
-y = fa.newton_raphson(x,x1,L)
-plt.plot(x,y)
-plt.show()
-
-if np.all( 0.01 < y) and np.all( y < 1):
-    print("imagen dentro del intervalo")
-else:
-    print("no se puede usar Newton-Raphson")
-
-np.all(fa.newton_raphson_coef_k(x,x1,L) < 42)
-
-np.all(fa.newton_raphson_coef_d(x,x1,L)<0.009)
-
-print("Kd = ", 42*0.009, " ≤ 1")
-print("se cumple que es continua, la imagen pertenece al intervalo, y Kd ≤ 1")
-
-
+mostrar_intervalo_en_g(intervalo)
+a, b = obtener_cambio_de_signo_en_g(intervalo)
+mostrar_valores_de_cambio_de_signo_en_g(a, b)
+graficar_g_en_intervalo(intervalo)    
+    
+    
+    
 intervalo = np.linspace(0.01, 1, 100)
 intervalo = np.float64(intervalo)
 y = fa.newton_raphson(intervalo, x1, L)
 
-if np.all( 0.01 < y) and np.all( y < 1):
-    print("Imagen dentro del intervalo, se puede usar Newton-Raphson")
-else:
-    print("No se puede usar Newton-Raphson")
-
-semilla = 0.04501
-u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
+verificacion_numerica_N_R(y)
+    
+semilla = 0.01
+u, u_previo = fa.buscar_raiz_newton_raphson(semilla)
 
 
 iu_rel = fa.error_u_relativo(u_previo, x1, L, 0, 0)
@@ -77,8 +75,8 @@ eu = iu_rel*u
 u, eu = fa.redondear_valor_y_error(u, eu)
 print( u, eu)
 
-plt.plot(intervalo,y)
-plt.show()
+verificacion_visual_N_R(intervalo, y)
+
 # Calculos para c2
 
 c2 = fa.valor_de_c2(x1,y1,u)

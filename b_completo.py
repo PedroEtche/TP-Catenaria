@@ -62,7 +62,9 @@ b=1
 fa.metodo_biseccion_segun_cota(a, b, 0.00001, x1, L)
 
 print("probamos si se puede usar el metodo de n-r con un mejor intervalo debido al metodo de biseccion")
-x = np.linspace(0.045, 0.046, 100)
+a = 0.045
+b = 0.046
+x = np.linspace(a,b, 100)
 x = np.float64(x)
 y = fa.newton_raphson(x,x1,L)
 plt.plot(x,y)
@@ -75,15 +77,24 @@ if np.all( a < y) and np.all( y < b):
 else:
     print("no se puede usar Newton-Raphson")
 
-np.all(fa.newton_raphson_coef_k(x,x1,L)<40)
-coef_k = 40
-np.all(fa.newton_raphson_coef_d(x,x1,L)<0.009)
-coef_d = 0.009
-####
-# 40*0.009 = 0.36
+print("evaluo los valores de K y d")
+print(fa.newton_raphson_coef_k(x,x1,L))
+print(fa.newton_raphson_coef_d(x,x1,L))
+
+
+coef_k=42
+coef_d=0.009
+if(np.all(fa.newton_raphson_coef_k(x,x1,L)<coef_k)):
+    print("K=",coef_k, " es una cota")
+
+if(np.all(fa.newton_raphson_coef_d(x,x1,L)<coef_d)):
+    print("d=",coef_d, " es una cota")
+if(coef_k*coef_d <= 1):
+    print("Kd≤1")
 
 print("se cumple que es continua, la imagen pertenece al intervalo, y Kd≤1 por lo que podemos usar N-R")
-    
+print("Busco la raiz usando N-R")
+
 semilla = 0.04501
 u, u_previo = fa.buscar_raiz_newton_raphson(semilla, x1, L)
 

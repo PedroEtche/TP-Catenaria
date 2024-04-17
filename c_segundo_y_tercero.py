@@ -16,12 +16,12 @@ error_L = 0.05
 
 # FUNCIONES
 
-semilla = 0.01
+semilla = 0.04501
 u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
 iu_rel = fa.error_u_relativo(u_previo, x1, L, error_x1/x1, error_L/L)
 eu = iu_rel*u
 u, eu = fa.redondear_valor_y_error(u, eu)
-
+print("u:",u," error u:", eu)
 
 c2 = fa.fun_c2(x1, y1, u)
 
@@ -49,4 +49,4 @@ error_ordenada_rel = fa.error_y(0,u,c2,0,eu/c2,ec2/c2)
 error_ordenada = error_ordenada_rel*ordenada
 
 ordenada, error_ordenada = fa.redondear_valor_y_error(ordenada, error_ordenada)
-print("La ornedada y su error son: ", ordenada, error_ordenada)
+print("La ordenada y su error son: ", ordenada, error_ordenada)

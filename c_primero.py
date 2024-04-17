@@ -35,31 +35,30 @@ def perturbacion_te_relativa(u,x1,L):
 
 
 print("DESARROLLO ANALITICO")
-semilla = 0.01
+semilla = 0.04501
 u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
     
 iu_rel = fa.error_u_relativo(u_previo, x1, L, error_x1/x1, error_L/L)
 #busco el error absoluto
 eu = iu_rel*u
-print(u, eu)
 
 u, eu = fa.redondear_valor_y_error(u, eu)
-print(u, eu)
-
-
+print("u:",u," error u:", eu)
 
 print("DESARROLLO CON PERTURBACIONES EXPERIMENTALES")
 semilla = 0.01
 u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
-    
+
+print("Perturbamos los valores de a 1,0.1,0.01")
 for i in range(0,3):
     error_exp = error_experimental_u_inherente_absoluto(u_previo, pow(10,-i), pow(10,-i))
     print("variacion de ",pow(10,-i), " error:", error_exp)
     
 #con los datos anteriores determino una cota para el coeficiente del error inherente propagado
+
 error_exp_inherente = 0.0003
 error_exp_inherente
-
+print("una cota es:0.0003")
 # debo manda el u_previo porque estoy propagando la funcion h(u) newton-raphson la cual me da u=h(u_previo)
 te_u = perturbacion_te_relativa(u_previo,x1,L)
 

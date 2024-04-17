@@ -183,9 +183,7 @@ def aproximacion_cuadratica(x, y):
     B = np.array(B)
     
     X = np.linalg.solve(A, B)
-    sol = A*X
-    print(sol)
-    print(B)
+
     return X
 
 def error_cuadratico_aproximacion_cuadratica(x,y,a,b,c):

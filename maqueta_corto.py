@@ -126,3 +126,7 @@ plt.plot(x_medido,y_medido, label='datos_reales', color='red')
 plt.show()
 
 print("error cuadratico:",fa.error_cuadratico_funcion_catenaria(x_medido, y_medido, u, c2))
+
+print(fa.fun_catenaria(x_medido,u,c2))
+print(y_medido)
+print(y_medido-fa.fun_catenaria(x_medido,u,c2))

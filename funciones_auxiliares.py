@@ -1,17 +1,12 @@
 import numpy as np
 
-x0 = -29.9
-x1 = -x0
-y1 = 49.8
-y0 = y1
-L = 80.4
-
 error_x1 = 0.05
 error_y1 = 0.05
 error_L = 0.05
 
-def g(u):
-    return ( 2* (np.sinh(u * round(x1, 1)) / u) ) - round(L, 1)
+def g(u,x1,L):
+    y = ( 2* (np.sinh(u*x1)/u) ) - L
+    return y
 
 def orden_numpy(n):
     float_str = str(np.format_float_scientific(n, precision=1, exp_digits=2))
@@ -43,9 +38,9 @@ def newton_raphson(u, x1, L):
 
     return N13
 
-def buscar_raiz_newton_raphson(u):
+def buscar_raiz_newton_raphson(u, x1, L):
     iteraciones = 0
-    while iteraciones < 100 and g(u) != 0:
+    while iteraciones < 100 and g(u,x1,L) != 0:
         u_previo = u
         u = newton_raphson(u, x1, L)
         print(u)
@@ -139,3 +134,64 @@ def fun_c2(x1, y1, u):
     n2 = np.cosh(n1)
     n3 = n2/u
     return y1 - n3
+
+def g_derivada(u,x1,L):
+    return (2*np.cosh(u*x1)*(u*x1)-2*np.sinh(u*x1))/pow(u,2)
+
+def g_segunda_derivada(u,x1,L):
+    j = np.cosh(u*x1)*(u*x1)-np.sinh(u*x1)
+    j_der = np.sinh(u*x1)*(u*x1)
+
+    num = j_der*u-2*j
+    return (2*num)/pow(u,3)
+
+def newton_raphson_coef_k(x,x1,L):
+    return abs(g_segunda_derivada(x,x1,L))/abs(g_derivada(x,x1,L))
+
+def newton_raphson_coef_d(x,x1,L):
+    return abs(g(x,x1,L))/abs(g_derivada(x,x1,L))
+
+def metodo_biseccion_segun_cota(a, b, cota, x1, L):
+
+    iteraciones = 0
+    while abs(b - a)/2 > cota:
+        iteraciones = iteraciones + 1
+        c = (a + b) / 2
+        if g(a, x1, L) * g(c, x1, L) < 0:
+            b = c
+        else:
+            a = c
+        print("a:",a,"g(a):",g(a, x1, L),"  b:",b,"g(b)",g(b, x1, L))
+    raiz = (a + b) / 2
+    print(f"La raíz de la función es: {raiz:.5f}")
+    print("Las iteraciones fueron:", iteraciones)
+    return raiz
+
+def funcion_cuadratica(x,a,b,c):
+    return a+b*x+c*x*x
+
+def aproximacion_cuadratica(x, y):
+    sum = 0
+    m = len(x)
+    A = [ [1,             x.mean(),      (x*x).mean()],
+               [x.mean(),     (x*x).mean(),   (x*x*x).mean()],
+               [(x*x).mean(), (x*x*x).mean(), (x*x*x*x).mean()]
+             ]
+    
+    B = [y.mean(), (y*x).mean(), (y*x*x).mean()]
+    A = np.array(A)
+    B = np.array(B)
+    
+    X = np.linalg.solve(A, B)
+    sol = A*X
+    print(sol)
+    print(B)
+    return X
+
+def error_cuadratico_aproximacion_cuadratica(x,y,a,b,c):
+    diferencia = y - funcion_cuadratica(x,a,b,c)
+    return np.sqrt( (diferencia*diferencia).mean())
+
+def error_cuadratico_funcion_catenaria(x,y,u,c2):
+    diferencia = y - fun_catenaria(x,u,c2)
+    return np.sqrt( (diferencia*diferencia).mean())

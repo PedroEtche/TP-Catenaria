@@ -18,7 +18,7 @@ error_L = 0.05
 
 def calculos_c2_e_y():
     semilla = 0.01
-    u, u_previo = fa.buscar_raiz_newton_raphson(semilla)
+    u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
     iu_rel = fa.error_u_relativo(u_previo, x1, L, error_x1/x1, error_L/L)
     eu = iu_rel*u
     u, eu = fa.redondear_valor_y_error(u, eu)

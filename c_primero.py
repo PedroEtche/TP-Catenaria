@@ -37,7 +37,7 @@ def perturbacion_te_relativa(u,x1,L):
 def main():
     print("DESARROLLO ANALITICO")
     semilla = 0.01
-    u, u_previo = fa.buscar_raiz_newton_raphson(semilla)
+    u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
     
     iu_rel = fa.error_u_relativo(u_previo, x1, L, error_x1/x1, error_L/L)
     #busco el error absoluto
@@ -51,7 +51,7 @@ def main():
 
     print("DESARROLLO CON PERTURBACIONES EXPERIMENTALES")
     semilla = 0.01
-    u, u_previo = fa.buscar_raiz_newton_raphson(semilla)
+    u, u_previo = fa.buscar_raiz_newton_raphson(semilla,x1,L)
     
     for i in range(0,3):
         error_exp = error_experimental_u_inherente_absoluto(u_previo, pow(10,-i), pow(10,-i))
